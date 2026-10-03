@@ -68,7 +68,62 @@ Pinos que **não podem** ser usados:
 | GPIO6–GPIO11 | Ligados à memória flash — uso causa crash |
 | **TX** (GPIO1) / **RX** (GPIO3) | Ocupados pela Serial e pelo chip USB-serial |
 | **A0** (ADC0) | Só entrada analógica — não gera PWM |
-| **D0** (GPIO16) | PWM lento (registrador RTC), nível baixo medido de ~1V e LED onboard na NodeMCU V3 |
+| **D0** (GPIO16) | PWM lento (escrita extra no registrador RTC) e LED onboard na NodeMCU V3 |
+
+---
+
+## ⚡ Precisa de resistor? (segurança elétrica)
+
+**Não. Nenhum resistor externo é necessário neste projeto.**
+
+| Verificação | Situação |
+|---|---|
+| **Corrente** | Limite do ESP8266 é **12 mA por pino**. As 6 saídas alimentam entradas TTL do L298N, que consomem **µA**. Folga de mais de 99%. |
+| **Tensão HIGH** | ESP entrega **3,3 V**; o L298N precisa de **≥ 2,3 V**. Folga de 1,0 V. |
+| **Tensão LOW** | ESP entrega **≈ 0,1 V**; o L298N aceita até **1,5 V**. Folga de 1,4 V. |
+| **Conversão de nível** | Não é necessária — 3,3 V já é nível TTL válido. |
+
+### De onde vem a ideia de que algum pino precisa de resistor
+
+- **D8 (GPIO15)** — é *strapping* de boot e precisa estar LOW. A placa
+  **NodeMCU já traz esse pull-down soldado** (sem ele o ESP não sobe). Então o
+  resistor que se precisaria **já vem de fábrica**. ✅
+- **D0 (GPIO16)** — é o único pino com pull-down **interno**, mas **não tem
+  pull-up interno**. Ou seja: se você precisasse de um pull-up no D0, **aí
+  sim** seria preciso um resistor externo. Nos demais pinos (0–15) o pull-up
+  interno (`INPUT_PULLUP`) basta para botões.
+- **D3 (GPIO0)** e **D4 (GPIO2)** — já têm pull-up externo de 10 kΩ na placa.
+
+No nosso projeto **todos os 6 sinais são saídas** indo para entradas passivas
+do driver. Não há entrada flutuando, não há limite de corrente a respeitar e
+não há diferença de tensão a converter.
+
+### ⚠️ O único risco real de curto: o jumper ENA/ENB
+
+O módulo de L298N usa o jumper para ligar o pino `ENA`/`ENB` ao **plano de
++5V**. Se o pino do ESP estiver ligado ali ao mesmo tempo:
+
+| Situação | Resultado |
+|---|---|
+| Jumper **removido** + fio do ESP no pino | ✅ Seguro — vira entrada TTL passiva |
+| Jumper **colocado** + fio do ESP no pino | ❌ **Curto: 5V na saída de 3,3V → queima o GPIO** |
+| Jumper **colocado** + *sem* fio do ESP | Inofensivo (só ignora o PWM) |
+
+Por isso o passo 2 do checklist abaixo existe.
+
+### Outros cuidados de fiação
+
+- **GND comum** entre NodeMCU e driver — sem ele nada funciona direito.
+- **Nunca** deixe a tensão dos motores (7–35V) chegar num pino do ESP.
+- Confira a **polaridade** da alimentação dos motores.
+
+### Conflitos para o futuro
+
+| Pinos em uso | Função alternativa |
+|---|---|
+| D5/D6/D7/D8 | **SPI completa** — um display SPI não teria pinos livres |
+| D1/D2 | **I2C padrão** — um OLED I2C conflita com IN1/IN2 |
+| TX/RX | Únicos livres, hoje ocupados pela Serial de debug |
 
 ---
 
@@ -93,9 +148,14 @@ Pinos que **não podem** ser usados:
 Siga a tabela de pinagem acima. Confira:
 
 - [ ] Pino de enable direito do driver ligado em **D8 (GPIO15)** — *não em D3*
-- [ ] Jumpers `ENA`/`ENB` do driver **removidos**
+- [ ] **Jumpers `ENA`/`ENB` removidos** ⚠️ *Com o jumper posto e o fio do ESP
+      ligado, você curto-circuita 5V na saída de 3,3V e queima o GPIO.
+      Veja "O único risco real de curto" acima.*
 - [ ] **GND comum** entre NodeMCU e driver (obrigatório)
 - [ ] Alimentação dos motores na fonte/bateria do driver, **não** no NodeMCU
+- [ ] Nenhum fio de tensão de motor encostando em pino do ESP
+
+> **Nenhum resistor é necessário.** Ver a seção ⚡ acima.
 
 ### 3. Gravar
 
