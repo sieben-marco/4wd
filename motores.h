@@ -65,9 +65,11 @@ void iniciarMotores() {
   pinMode(ENA, OUTPUT);
   pinMode(ENB, OUTPUT);
 
+#ifdef ESP8266
   // Redundante na core 3.x (padrão já é 255), mas essencial na 2.x
-  // (padrão 1023 = motor limitado a 25% da potência).
+  // (padrão 1023 (2.x) = motor limitado a 25% da potência se definido para 255).
   analogWriteRange(PWM_MAX);
+#endif
   analogWriteFreq(PWM_FREQ_HZ);
 
   parar();
