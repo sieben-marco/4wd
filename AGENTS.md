@@ -113,7 +113,7 @@ Registre aqui qualquer mudança de direção para o próximo agente.
 
 | Decisão | Motivo |
 |---|---|
-| `PWM_FREQ_HZ = 20000` | 1 kHz (padrão) zumba em motor CC. 20 kHz fica fora da faixa audível. A doc da core avisa que 40 kHz já sobrecarrega a CPU — com 2 saídas, 20 kHz é folgado. |
+| `PWM_FREQ_HZ = 20000` Não usar: sobreaquece a L928N | 1 kHz (padrão) zumba em motor CC. 20 kHz fica fora da faixa audível. A doc da core avisa que 40 kHz já sobrecarrega a CPU — com 2 saídas, 20 kHz é folgado. |
 | Failsafe de 600 ms + heartbeat de 250 ms | Cobertura de 2,4×: mesmo com 1-2 heartbeats perdidos, o carrinho não segue andando. Se alterar um, mantenha essa margem. |
 | **Sem botão ■ parar** | `pointerup` já dispara `stop()` e o failsafe cobre quedas de Wi-Fi. Menos UI = menos superfície de erro. |
 | Fila de 1 posição no `send()` do JS | O código original descartava silenciosamente o `parar` se uma requisição do heartbeat estivesse em voo → o carrinho seguia até o failsafe (até 600 ms andando após soltar o dedo). |

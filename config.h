@@ -36,7 +36,6 @@ constexpr const char* MDNS_NOME  = "carrinho";
 //  COMPORTAMENTO
 // ============================================================
 constexpr unsigned long TIMEOUT_MS = 600;  // failsafe: sem comando, para
-constexpr int PWM_FREQ_HZ = 20000;         // 20 kHz: fora da faixa audível
 constexpr int PWM_MAX     = 255;           // faixa do analogWrite
 
 // ============================================================

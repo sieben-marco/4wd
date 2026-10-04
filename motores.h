@@ -70,7 +70,6 @@ void iniciarMotores() {
   // (padrão 1023 (2.x) = motor limitado a 25% da potência se definido para 255).
   analogWriteRange(PWM_MAX);
 #endif
-  analogWriteFreq(PWM_FREQ_HZ);
 
   parar();
 }

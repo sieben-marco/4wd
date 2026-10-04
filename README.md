@@ -260,7 +260,7 @@ Tudo o que costuma mudar está em `config.h`:
 | Mudar o hostname | `MDNS_NOME` |
 | Mudar o tempo do failsafe | `TIMEOUT_MS` (padrão 600) |
 | Mudar a velocidade máxima | `PWM_MAX` (padrão 255) |
-| Tirar o zumbido do motor | `PWM_FREQ_HZ` — já está em 20000 |
+| Tirar o zumbido do motor | `PWM_FREQ_HZ` (não usar, sobreaquece L928N) — já está em 20000 |
 | Desligar os logs | `#define DEBUG 0` |
 
 Para **remover os logs por completo** (economiza flash), troque `DEBUG` para `0`.
@@ -277,7 +277,7 @@ Para **remover os logs por completo** (economiza flash), troque `DEBUG` para `0`
 | Anda ao contrário | Inverta os fios de um dos motores **ou** inverta os sinais na tabela `COMANDOS[]` |
 | Para sozinho depois de ~0,6 s | Failsafe normal: falta o heartbeat — veja se a página está aberta |
 | LED vermelho "Desconectado" | Celular saiu da rede `Carrinho_4WD` |
-| Zumbido no motor | `PWM_FREQ_HZ` baixo — use 20000 |
+| Zumbido no motor | `PWM_FREQ_HZ` baixo — use 20000 (não usar, sobrecarregado L298N) |
 | Carrega e reinicia ao acelerar | Fonte/bateria fraca — os motores puxam a 3,3V |
 
 ### Monitor serial
