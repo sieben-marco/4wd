@@ -48,6 +48,6 @@ void registrarRotas() {
   });
 
   server.onNotFound([]() {
-    server.send(404, "text/plain", "Não encontrado");
+    server.send(404, "text/plain", "Nao encontrado");
   });
 }
