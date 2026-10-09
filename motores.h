@@ -16,7 +16,7 @@ struct Comando {
 
 const Comando COMANDOS[] = {
   {"/frente",    "FRENTE",    +1, +1},
-  {"/tras",      "TRÁS",      -1, -1},
+  {"/tras",      "TRAS",      -1, -1},
   {"/esquerda",  "ESQUERDA",  -1, +1},
   {"/direita",   "DIREITA",   +1, -1},
 };
